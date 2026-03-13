@@ -1,0 +1,14 @@
+.button{
+
+    border: none;
+    outline: none;
+    padding-inline: 1.5rem;
+    padding-block: 0.75rem;
+    border-radius: 1rem; 
+
+    &.primary-btn{
+        background-color: #3b82f3;
+        color: white;
+    }
+}
+
