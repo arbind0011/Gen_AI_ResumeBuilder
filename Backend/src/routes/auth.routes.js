@@ -17,7 +17,7 @@ authRouter.post("/register", authController.registerUserController)
  * @description Login a user
  * @access public
  */
- authRouter.post("/login", authController.loginUserController)
+authRouter.post("/login", authController.loginUserController)
 
  /**
   * @rout GET /api/auth/logout
