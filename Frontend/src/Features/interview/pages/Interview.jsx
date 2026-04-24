@@ -6,7 +6,7 @@ import { useInterview } from '../hooks/useInterview.js'
 const Interview = () => {
   const { interviewId } = useParams()
   const [activeTab, setActiveTab] = useState('technical')
-  const { report, loading, getReportById } = useInterview()
+  const { report, loading, getReportById, getResumePdf } = useInterview()
   const [expandedQuestion, setExpandedQuestion] = useState(null)
 
   useEffect(() => {
@@ -309,6 +309,10 @@ const Interview = () => {
                 ))}
               </div>
             </div>
+
+            <button className="btn btn-primary" onClick={() => {getResumePdf(interviewId)}}>
+              Generate Resume PDF
+            </button>
           </aside>
         </div>
       </div>
