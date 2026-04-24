@@ -6,13 +6,13 @@ const Register = () => {
 
   const navigate = useNavigate()
   const [username, setUsername] = useState("")
-  const [email, setEmail] = useStste("")
+  const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
   const {loading, handleRegister} = useAuth()
 
 
-  const handelSubmit = async (e) => {
+  const handleSubmit = async (e) => {
       e.preventDefault()
       await handleRegister({username, email, password})
       navigate("/")
@@ -23,7 +23,7 @@ const Register = () => {
     <div className="form-container">
         <h1>Register</h1>
 
-        <form onSubmit={handelSubmit}>
+        <form onSubmit={handleSubmit}>
 
             <div className="input-group">
                 <label htmlFor="username">Username</label>

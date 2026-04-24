@@ -1,7 +1,36 @@
-import React, { useState } from "react";
+import React, {useState, useRef} from "react";
 import "../style/home.scss";
+import { useInterview } from "../hooks/useInterview";
+import { useNavigate } from "react-router";
 
 const Home = () => {
+
+  const {loading, generateReport} = useInterview()
+  const [jobDescription, setJobDescription] = useState("")
+  const [selfDescription, setSelfDescription] = useState("")
+  const resumeInputRef = useRef()
+
+  const navigate = useNavigate()
+
+  const handleGenerateReport = async () => {
+    try {
+      const resumeFile = resumeInputRef.current.files[0]
+      if (!resumeFile) {
+        alert("Please select a resume file")
+        return
+      }
+      const data = await generateReport({jobDescription, selfDescription, resumeFile})
+      if (data && data._id) {
+        navigate(`/interview/${data._id}`)
+      } else {
+        alert("Failed to generate report. Please try again.")
+      }
+    } catch (error) {
+      console.error("Report generation failed:", error)
+      alert(error.message || "Failed to generate report. Please make sure you are logged in.")
+    }
+  }
+
   const [isDragging, setIsDragging] = useState(false);
   const [fileName, setFileName] = useState(null);
 
@@ -30,6 +59,17 @@ const Home = () => {
     }
   };
 
+  if(loading) {
+    return (
+      <main className="loading-screen">
+        <div className="loading-container">
+          <h1 className="loading-text">Generating Your Interview Strategy...</h1>
+          <p className="loading-subtext">This may take around 30 seconds. Please wait.</p>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="home">
       <div className="form-wrapper">
@@ -56,6 +96,7 @@ const Home = () => {
               Paste the full job description here...
             </label>
             <textarea
+              onChange={(e) => {setJobDescription(e.target.value)}}
               name="description"
               id="description"
               placeholder="e.g. 'Senior Frontend Engineer at Google requires proficiency in React, TypeScript, and large-scale system design...'"
@@ -97,14 +138,7 @@ const Home = () => {
                   </>
                 )}
               </label>
-              <input
-                hidden
-                type="file"
-                id="resume"
-                name="resume"
-                accept=".pdf,.docx"
-                onChange={handleFileSelect}
-              />
+              <input ref={resumeInputRef} hidden type="file" id="resume" name="resume" accept=".pdf,.docx" onChange={handleFileSelect}/>
             </div>
 
             {/* OR Divider */}
@@ -116,6 +150,7 @@ const Home = () => {
                 Quick Self-Description
               </label>
               <textarea
+                onChange={(e) => {setSelfDescription(e.target.value)}}
                 id="self-description"
                 name="self-description"
                 placeholder="Briefly describe your experience, key skills, and years of experience if you don't have a resume handy..."
@@ -132,7 +167,7 @@ const Home = () => {
             </div>
 
             {/* Generate Button */}
-            <button className="btn primary-btn">
+            <button onClick={handleGenerateReport} className="btn primary-btn">
               <span className="btn-icon">⚡</span>
               Generate My Interview Strategy
             </button>
