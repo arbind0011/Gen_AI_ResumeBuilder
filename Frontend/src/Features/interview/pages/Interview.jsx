@@ -28,19 +28,6 @@ const Interview = () => {
     setExpandedQuestion(expandedQuestion === id ? null : id)
   }
 
-  const getSeverityColor = (severity) => {
-    switch (severity) {
-      case 'high':
-        return '#ec4899'
-      case 'medium':
-        return '#f59e0b'
-      case 'low':
-        return '#10b981'
-      default:
-        return '#6366f1'
-    }
-  }
-
   if (loading) {
     return (
       <main className="interview">
@@ -77,6 +64,19 @@ const Interview = () => {
         </div>
       </main>
     )
+  }
+
+    const getSeverityColor = (severity) => {
+    switch (severity) {
+      case 'high':
+        return '#ec4899'
+      case 'medium':
+        return '#f59e0b'
+      case 'low':
+        return '#10b981'
+      default:
+        return '#6366f1'
+    }
   }
 
   return (

@@ -5,7 +5,7 @@ import { useNavigate } from "react-router";
 
 const Home = () => {
 
-  const {loading, generateReport} = useInterview()
+  const {loading, generateReport, reports} = useInterview()
   const [jobDescription, setJobDescription] = useState("")
   const [selfDescription, setSelfDescription] = useState("")
   const resumeInputRef = useRef()
@@ -179,6 +179,39 @@ const Home = () => {
           </div>
         </div>
       </div>
+
+      {/* Recent reports lists */}
+            {reports.length > 0 && (
+              <div className="recent-reports">
+                <h3 className="section-title">Recent Reports</h3>
+                <ul className="reports-list">
+                  {reports.map((report) => {
+                    let scoreClass = 'high';
+                    if (report.matchScore < 50) scoreClass = 'low';
+                    else if (report.matchScore < 75) scoreClass = 'medium';
+                    
+                    return (
+                      <li key={report._id} className="report-item" onClick={() => navigate(`/interview/${report._id}`)}>
+                        <div style={{display: 'flex', alignItems: 'center', gap: '0.6rem'}}>
+                          <span className="report-icon">📄</span>
+                          <span className="report-title">{report.title}</span>
+                        </div>
+                        <div className="report-meta">
+                          <span className="report-date">
+                            {new Date(report.createdAt).toLocaleDateString()}
+                          </span>
+                          {report.matchScore && (
+                            <span className={`report-score ${scoreClass}`}>
+                              {report.matchScore}%
+                            </span>
+                          )}
+                        </div>
+                      </li>
+                    )
+                  })}
+                </ul>
+              </div>
+            )}
     </main>
   );
 };
